@@ -17,13 +17,10 @@ class GitHubHandler:
             f"https://api.github.com/repos/{repository}/contents/{input_filename}"
         )
         self.header, self.content, self.sha = None, None, None
-        self.base64content = None
 
     def fetch_content(self) -> str:
         """Get content of input filename"""
         token = os.getenv("GITHUB_ACCESS_TOKEN")
-        base64content = base64.b64encode(open(self.input_filename, "rb").read())
-        self.base64content = base64content
         data = requests.get(
             f"{self.url}?ref={self.branch}", headers={"Authorization": f"token {token}"}
         ).json()
