@@ -23,6 +23,6 @@ You should now be able to run `python main.py` with the required input
 ### How to use
 Once installed, you can call `main.py` with the following parameters:
 ```
-main.py -i {file_to_edit} -r {repository_of_file} 
+python main.py -i {file_to_edit} -r {repository_of_file} 
 ```
 This fetches your latest additions to Pocket, adds them to the specified file and commits and pushes that change to GitHub.
