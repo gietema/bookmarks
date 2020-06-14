@@ -10,6 +10,12 @@ import click
 
 load_dotenv()
 
+@click.command()
+def main():
+    """Run to get the Pocket access token"""
+    access_token = PocketHandler().authenticate()
+    print(access_token)
+
 
 class PocketHandler:
     def get_urls_titles(self) -> Tuple[List[str], List[str]]:
@@ -71,15 +77,10 @@ class PocketHandler:
         )
         return response.json()["list"]
 
-    def authenticate(self, request_token: str) -> str:
+    def authenticate(self) -> str:
         """
         Used to authenticate the user.
 
-        Parameters
-        ----------
-        request_token: str
-            The request token
-        
         Returns
         -------
         access_token: str
@@ -90,6 +91,7 @@ class PocketHandler:
         Access tokens do not expire in pocket, so this only needs to be done once. 
         If you're just using this app for your own purposes, just call this locally and store the access token
         """
+        request_token = self.get_request_token()
         print(
             f"""
             Go to: https://getpocket.com/auth/authorize?request_token={request_token}&redirect_uri=http://www.google.com"
@@ -97,7 +99,6 @@ class PocketHandler:
         )
         wait_for_response = input("Enter if visited")
         access_token = self.get_access_token(request_token)
-        print(access_token)
         return access_token
 
     def get_access_token(self, request_token: str) -> str:
@@ -119,3 +120,11 @@ class PocketHandler:
         response = response.content.decode()
         assert response[:13] == "access_token="
         return response[13:].split("&")[0]
+
+
+if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    )
+    main()  # pylint: disable=no-value-for-parameter
