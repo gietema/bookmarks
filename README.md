@@ -14,11 +14,9 @@ Small script that gets links that are added to Pocket, and pushes new changes to
 1. Create an app on [pocket]([https://getpocket.com/developer/apps/new](https://getpocket.com/developer/apps/new)), store its consumer key
 2. Install the requirements (just `python-dotenv` and `click`)  
 ```pip install -r requirements.txt```
-3. Create an environment file
-	 `cp .env.example .env`
-	 Add your GitHub access code and Pocket consumer key
+3. Create an environment file (`cp .env.example .env`). Add your GitHub access code and Pocket consumer key
 4. Run `python pocket_handler.py` and save the `access_token` to your  `.env` file. 
-5. Add a `input_separator` to you `.env` file. The script will try to add new links after this point in your file. For example, I use `<ul>` as my input separator, and add new a `<li>` after that for each new link. You can change this setup in `main.py` `add_bookmark()`. 
+5. Add an `input_separator` to you `.env` file. The script will try to add new links after this point in your file. For example, I use `<ul>` as my input separator, and add new a `<li>` after that for each new link. You can change this setup in `main.py` `add_bookmark()`. 
 
 You should now be able to run `python main.py` with the required input
 
