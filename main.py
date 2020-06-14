@@ -3,6 +3,7 @@ Add bookmark to gietema.github.io/bookmarks
 """
 import logging
 import click
+from typing import Optional
 from urllib.parse import urlparse
 from datetime import datetime
 from github_handler import GitHubHandler
@@ -32,17 +33,30 @@ from pocket_handler import PocketHandler
     default="master",
     help="The branch where the file should be updated. Defaults to master",
 )
-def main(input_filename: str, repository: str, branch: str = "master"):
+def main(input_filename: str, repository: str, branch: Optional[str] = "master"):
+    """
+    Main function to run. Adds new bookmarks from Pocket to bookmarks page
+
+    Parameters
+    ----------
+    input_filename: str
+        The name of the file that you want to update, e.g. 'bookmarks.html'
+    repository: str
+        The repository where the file is located, {username}/{repository_name}
+    branch: str = "master"
+        The branch where the file should be updated. Defaults to master
+    """
+    # get urls and titles from pocket
     urls, titles = PocketHandler().get_urls_titles()
+    # get page content from GitHub
+    handler = GitHubHandler(input_filename, repository, branch)
+    content = handler.fetch_content()
+    # add url and title to content page
     for url, title in zip(urls, titles):
         print(url, title)
-        handler = GitHubHandler(input_filename, repository, branch)
-        content = handler.fetch_content()
-        content_with_bookmark = add_bookmark(content, url, title)
-        if content == content_with_bookmark:
-            print("Bookmark already added")
-            continue
-        handler.push(content_with_bookmark)
+        content = add_bookmark(content, url, title)
+    # push content
+    handler.push(content)
 
 
 def add_bookmark(all_content: str, bookmark_url: str, title: str) -> str:
@@ -66,9 +80,13 @@ def add_bookmark(all_content: str, bookmark_url: str, title: str) -> str:
     header, content = all_content.split("<ul>")
     # if link already added, return original content
     if bookmark_url in content:
+        print("Bookmark added already")
         return all_content
     # add bookmark
-    content = f'\n<li><a href="{bookmark_url}" target="_blank">{title}</a><br>{urlparse(bookmark_url).netloc} - {datetime.now().strftime("%Y-%m-%d")}</li>' + content
+    content = (
+        f'\n<li><a href="{bookmark_url}" target="_blank">{title}</a><br>{urlparse(bookmark_url).netloc} - {datetime.now().strftime("%Y-%m-%d")}</li>'
+        + content
+    )
     return header + "<ul>" + content
 
 

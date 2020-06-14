@@ -19,7 +19,13 @@ class GitHubHandler:
         self.header, self.content, self.sha = None, None, None
 
     def fetch_content(self) -> str:
-        """Get content of input filename"""
+        """Get content of input filename
+        
+        Returns
+        -------
+        content: str
+            The content of the page that is requested
+        """
         token = os.getenv("GITHUB_ACCESS_TOKEN")
         data = requests.get(
             f"{self.url}?ref={self.branch}", headers={"Authorization": f"token {token}"}
@@ -31,6 +37,11 @@ class GitHubHandler:
     def push(self, content: str):
         """
         Commits and pushes header + content to GitHub
+
+        Parameters
+        ----------
+        content: str
+            The content of the page that will be pushed to self.input_filename
         """
         # necessary to create valid message
         content = base64.encodebytes(content.encode("utf-8")).decode("utf-8")
