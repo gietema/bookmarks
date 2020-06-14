@@ -3,6 +3,8 @@ Add bookmark to gietema.github.io/bookmarks
 """
 import logging
 import click
+from urllib.parse import urlparse
+from datetime import datetime
 from github_handler import GitHubHandler
 from pocket_handler import PocketHandler
 
@@ -61,13 +63,13 @@ def add_bookmark(all_content: str, bookmark_url: str, title: str) -> str:
     The content with the new bookmark added after the header
     """
     # separate header from content
-    header, content = all_content.split("</h1>")
+    header, content = all_content.split("<ul>")
     # if link already added, return original content
     if bookmark_url in content:
         return all_content
     # add bookmark
-    content = f'\n<a href="{bookmark_url}" target="_blank">{title}</a><br>' + content
-    return header + "</h1>" + content
+    content = f'\n<li><a href="{bookmark_url}" target="_blank">{title}</a><br>{urlparse(bookmark_url).netloc} - {datetime.now().strftime("%Y-%m-%d")}</li>' + content
+    return header + "<ul>" + content
 
 
 if __name__ == "__main__":
