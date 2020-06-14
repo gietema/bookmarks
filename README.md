@@ -1,5 +1,5 @@
 
-# Pocket to GitHub Pages Bookmarks
+# Save Pocket bookmarks to file on GitHub
 
 Small script that gets links that are added to Pocket, and pushes new changes to a file on GitHub.
 
