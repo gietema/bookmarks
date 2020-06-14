@@ -1,5 +1,5 @@
 """
-Add bookmark to gietema.github.io/bookmarks
+Add pocket bookmark to a specified file on GitHub
 """
 import logging
 import click
