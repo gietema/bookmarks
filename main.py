@@ -50,13 +50,15 @@ def main(input_filename: str, repository: str, branch: Optional[str] = "master")
     urls, titles = PocketHandler().get_urls_titles()
     # get page content from GitHub
     handler = GitHubHandler(input_filename, repository, branch)
-    content = handler.fetch_content()
+    original_content = handler.fetch_content()
+    content = original_content
     # add url and title to content page
     for url, title in zip(urls, titles):
         print(url, title)
         content = add_bookmark(content, url, title)
     # push content
-    handler.push(content)
+    if original_content != content:
+        handler.push(content)
 
 
 def add_bookmark(all_content: str, bookmark_url: str, title: str) -> str:
