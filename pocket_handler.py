@@ -34,7 +34,10 @@ class PocketHandler:
             return urls, titles
         for key, item in content.items():
             urls.append(item["resolved_url"])
-            titles.append(item["given_title"])
+            title = item["given_title"]
+            if len(title) < 3:
+                title = item["resolved_title"]
+            titles.append(title)
         return urls, titles
 
     def get_request_token(self) -> str:
