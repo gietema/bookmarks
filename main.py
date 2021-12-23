@@ -80,7 +80,7 @@ def add_bookmark(all_content: str, bookmark_url: str, title: str) -> str:
     The content with the new bookmark added after the header
     """
     # separate header from content
-    header, content = all_content.split(os.getenv("INSERT_SEPARATOR"))
+    header, content = all_content.split(os.getenv("INPUT_SEPARATOR"))
     # if link already added, return original content
     if bookmark_url in content:
         print("Bookmark added already")
@@ -90,7 +90,7 @@ def add_bookmark(all_content: str, bookmark_url: str, title: str) -> str:
         f'\n<li><a href="{bookmark_url}" target="_blank">{title}</a><br>{urlparse(bookmark_url).netloc} - {datetime.now().strftime("%Y-%m-%d")}</li>'
         + content
     )
-    return header + os.getenv("INSERT_SEPARATOR") + content
+    return header + os.getenv("INPUT_SEPARATOR") + content
 
 
 if __name__ == "__main__":
