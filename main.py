@@ -8,7 +8,7 @@ from typing import Optional
 from urllib.parse import urlparse
 from datetime import datetime
 from github_handler import GitHubHandler
-from pocket_handler import PocketHandler
+from pocket_handler import get_urls_titles
 
 
 @click.command()
@@ -48,7 +48,7 @@ def main(input_filename: str, repository: str, branch: Optional[str] = "master")
         The branch where the file should be updated. Defaults to master
     """
     # get urls and titles from pocket
-    urls, titles = PocketHandler().get_urls_titles()
+    urls, titles = get_urls_titles()
     # get page content from GitHub
     handler = GitHubHandler(input_filename, repository, branch)
     original_content = handler.fetch_content()
@@ -74,7 +74,7 @@ def add_bookmark(all_content: str, bookmark_url: str, title: str) -> str:
         The url that will be added as a link (a href={bookmark_url})
     title: str
         The title that will be displayed as a link
-    
+
     Returns
     -------
     The content with the new bookmark added after the header

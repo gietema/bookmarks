@@ -13,23 +13,19 @@ class GitHubHandler:
         self.input_filename = input_filename
         self.repository = repository
         self.branch = branch
-        self.url = (
-            f"https://api.github.com/repos/{repository}/contents/{input_filename}"
-        )
+        self.url = f"https://api.github.com/repos/{repository}/contents/{input_filename}"
         self.header, self.content, self.sha = None, None, None
 
     def fetch_content(self) -> str:
         """Get content of input filename
-        
+
         Returns
         -------
         content: str
             The content of the page that is requested
         """
         token = os.getenv("GITHUB_ACCESS_TOKEN")
-        data = requests.get(
-            f"{self.url}?ref={self.branch}", headers={"Authorization": f"token {token}"}
-        ).json()
+        data = requests.get(f"{self.url}?ref={self.branch}", headers={"Authorization": f"token {token}"}).json()
         self.sha = data["sha"]
 
         return base64.b64decode(data["content"]).decode("utf-8")
@@ -56,7 +52,7 @@ class GitHubHandler:
             }
         )
 
-        # push content to github
+        # push content to GitHub
         print("Pushing content to GitHub..")
         response = requests.put(
             self.url,
